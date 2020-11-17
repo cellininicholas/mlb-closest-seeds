@@ -47,12 +47,12 @@ def precache_morphs(seed_strings, isDevEnv):
 
         precomp_seed_index = 0
         morph_url = None
-        print(f"Iterating through {len(precomputed_seeds)} pre-computed morphs...")
+        print(f"Iterating through {len(precomputed_seeds)} pre-computed morphs for '{seed}'...")
         for precomp_seed in precomputed_seeds:
             # print(f'   Precomputed seed {precomp_seed_index}: {precomp_seed.id}')
             
             # Fire a morph request
-            print (f"{precomp_seed_index+1}- Requesting morph::{seed}::{precomp_seed.id}")
+            print (f"   {precomp_seed_index+1}- Requesting morph with {seed} and {precomp_seed.id}")
             morph_url = createMorph(seed, precomp_seed.id, frame_count, base_url)
             db.collection(u'seeds').document(seed).update({ 'morphURLs.'+precomp_seed.id.replace('.',''): morph_url })
             db.collection(u'seeds').document(precomp_seed.id).update({ 'morphURLs.'+seed.replace('.',''): morph_url })
@@ -74,8 +74,7 @@ def precache_morphs(seed_strings, isDevEnv):
 
         # 4-  Add/update the seed row, setting ‘precomputed’ to True
         if precomp_seed_index > 0 and morph_url is not None:
-            doc_ref.update({ u'precomputed': True,
-                             'morphURLs.'+prev_seed.replace('.',''): morph_url })
+            doc_ref.update({ u'precomputed': True })
 
         # 5- Also update the array of ‘morphs’???
 
