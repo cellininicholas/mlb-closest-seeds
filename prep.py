@@ -16,6 +16,7 @@ def generate_zs_from_seeds(seeds):
     return zs
 
 def process_seed_pngs(seed_scores, seed_predictions_dict):
+    # Accidently deleted seed13056
     count = 20000
     r = list(range(0,count))
     zs = generate_zs_from_seeds(r)
