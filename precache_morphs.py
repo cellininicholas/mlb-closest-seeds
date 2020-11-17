@@ -124,7 +124,7 @@ def main(argv):
     inputtextfile = ''
     isDevEnv = True
     try:
-        opts, args = getopt.getopt(argv,"he:o:",["ifile=","env="])
+        opts, args = getopt.getopt(argv,"hi:e:",["help","ifile=","env="])
     except getopt.GetoptError:
         print ('precache_morphs.py -i <input-textfile>')
         sys.exit(2)
@@ -136,8 +136,9 @@ def main(argv):
         elif opt in ("-i", "--itxtfile"):
             inputtextfile = arg
         elif opt in ("-e", "--env"):
-            isDevEnv = not (opt.lower() == 'prod' or opt.lower() == 'production')
+            isDevEnv = not (arg.lower() == 'prod' or arg.lower() == 'production')
     print ('Input file is ', inputtextfile)
+    print (f'isDevEnv: {isDevEnv}')
     # ----------------------------------
 
     if os.path.exists(inputtextfile) == False:
@@ -146,7 +147,7 @@ def main(argv):
 
     with open(inputtextfile) as f:
         content = f.readlines()
-        print (content)
+        #print (content)
 
         #reset_all_precomputed_flags()
         precache_morphs(content, isDevEnv)
