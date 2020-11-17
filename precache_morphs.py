@@ -124,7 +124,7 @@ def main(argv):
     inputtextfile = ''
     isDevEnv = True
     try:
-        opts, args = getopt.getopt(argv,"hi:o:",["ifile=","env="])
+        opts, args = getopt.getopt(argv,"he:o:",["ifile=","env="])
     except getopt.GetoptError:
         print ('precache_morphs.py -i <input-textfile>')
         sys.exit(2)
