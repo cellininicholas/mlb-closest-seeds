@@ -40,6 +40,7 @@ def process_seed_pngs(seed_scores, seed_predictions_dict):
         if name in seed_predictions_dict: seed_predictions = seed_predictions_dict[name]
 
         data = {
+            u'seedName': name,
             u'zVector': z,
             u'predictionScore': seed_score,
             u'predictions': seed_predictions,
@@ -48,7 +49,8 @@ def process_seed_pngs(seed_scores, seed_predictions_dict):
         progress = i / count
         print( "   Progress: {0}%".format(progress * 100), end="\r" )
         
-        entity = datastore.Entity(key=datastore_key(name), exclude_from_indexes=[u'zVector', u'predictionScore', u'predictions'])
+        entity = datastore.Entity(key=datastore_key(name), 
+                                  exclude_from_indexes=[u'seedName', u'zVector', u'predictionScore', u'predictions', u'morphURLs'])
         entity.update(data)
         datastore_client.put(entity)
 
