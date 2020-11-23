@@ -53,5 +53,3 @@ seed11553.png
 seed19582.png
 seed0433.png
 seed10227.png
-seed2493.png
-seed2493.png

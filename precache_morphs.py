@@ -99,7 +99,7 @@ def createMorph(seed1, seed2, frame_count, base_url):
     end = time.time()
 
     seed_str = response.text
-    print (f"      Returned in [{end - start}s]: {seed_str}")
+    print (f"         Returned in [{end - start}s]: {seed_str}")
     if isinstance(seed_str, str):
         return seed_str
     return None
