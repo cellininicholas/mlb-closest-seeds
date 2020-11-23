@@ -206,7 +206,7 @@ def main(argv):
         content = f.readlines()
         #print (content)
 
-        reset_all_precomputed_flags()
+        # reset_all_precomputed_flags()
         precache_morphs(content, isDevEnv)
 
 
