@@ -1,10 +1,17 @@
-# pip install --upgrade google-cloud-firestore
+# pip install --upgrade google-cloud-datastore
+
 import json
 import numpy as np
-from google.cloud import firestore
-from google.api_core.exceptions import NotFound
 
-db = firestore.Client(project='cl-syd-botanicals')
+from google.cloud import datastore
+
+# Instantiates a client
+datastore_client = datastore.Client(project='cl-syd-botanicals')
+ds_entity_kind = "seed"
+
+def datastore_key(seedName):
+    # The Cloud Datastore key for the new entity
+    return datastore_client.key(ds_entity_kind, seedName)
 
 def generate_zs_from_seeds(seeds):
     zs = []
@@ -16,11 +23,12 @@ def generate_zs_from_seeds(seeds):
     return zs
 
 def process_seed_pngs(seed_scores, seed_predictions_dict):
-    # Accidently deleted seed13056
+    
     count = 20000
+    # count = 8
+
     r = list(range(0,count))
     zs = generate_zs_from_seeds(r)
-    doc_ref = db.collection(u'seeds')
     i = 0
     for item in zs:
         name, z  = item
@@ -32,20 +40,26 @@ def process_seed_pngs(seed_scores, seed_predictions_dict):
         if name in seed_predictions_dict: seed_predictions = seed_predictions_dict[name]
 
         data = {
-            u'morphs': [],
             u'zVector': z,
             u'predictionScore': seed_score,
             u'predictions': seed_predictions,
             u'precomputed': False
         }
         progress = i / count
-        print( "{0}".format(progress), end="\r" )
-        try:
-            doc_ref.document(name).update(data)
-        except NotFound:
-            doc_ref.document(name).set(data)
+        print( "   Progress: {0}%".format(progress * 100), end="\r" )
+        
+        entity = datastore.Entity(key=datastore_key(name), exclude_from_indexes=[u'zVector', u'predictionScore', u'predictions'])
+        entity.update(data)
+        datastore_client.put(entity)
+
+        # try:
+        #     doc_ref.document(name).update(data)
+        # except NotFound:
+        #     doc_ref.document(name).set(data)
+
         i += 1
-    print( "COMPLETE!" )
+    print( "   COMPLETE!", end="\r" )
+    print("\n")
 
 def load_seed_score_dict():
     try:
